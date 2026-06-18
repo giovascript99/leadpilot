@@ -32,7 +32,7 @@ export async function PATCH(
   }
 
   try {
-    const lead = updateLeadStato(leadId, stato);
+    const lead = await updateLeadStato(leadId, stato);
     if (!lead) {
       return NextResponse.json({ error: "Lead non trovato." }, { status: 404 });
     }

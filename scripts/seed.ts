@@ -5,7 +5,7 @@
  *
  * Uso: npm run seed  (alias: npm run demo:reset)
  */
-import { getDb, insertLead } from "../lib/db";
+import { insertLead, resetAll } from "../lib/db";
 import { prossimiGiorniLavorativi } from "../lib/ai";
 import { businessConfig } from "../config/business";
 import { leadsEdilizia } from "./seed-data/edilizia";
@@ -25,17 +25,14 @@ const settore = /immobiliar/i.test(businessConfig.settore) ? "immobiliare" : "ed
 
 const slots = JSON.stringify(prossimiGiorniLavorativi(3));
 
-function main() {
-  const db = getDb();
-  const count = (db.prepare("SELECT COUNT(*) AS n FROM leads").get() as { n: number }).n;
+async function main() {
+  const count = await resetAll();
   if (count > 0) {
-    console.log(`Il database contiene già ${count} lead. Svuoto e ricreo i dati demo…`);
+    console.log(`Il database conteneva ${count} lead. Svuotato e ricreati i dati demo…`);
   }
-  db.prepare("DELETE FROM leads").run();
-  db.prepare("DELETE FROM reports").run();
 
   for (const l of leads) {
-    insertLead({
+    await insertLead({
       nome: l.nome,
       email: l.email,
       telefono: l.telefono,
@@ -57,4 +54,7 @@ function main() {
   console.log("  Avvia l'app con `npm run dev` e apri http://localhost:3000/dashboard");
 }
 
-main();
+main().catch((err) => {
+  console.error("Seed fallito:", err);
+  process.exit(1);
+});

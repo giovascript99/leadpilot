@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 export async function GET() {
   try {
-    const report = getLastReport();
+    const report = await getLastReport();
     return NextResponse.json({ report: report ?? null });
   } catch (err) {
     console.error("GET /api/report", err);
@@ -19,7 +19,7 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const leads = listLeads();
+    const leads = await listLeads();
     if (leads.length === 0) {
       return NextResponse.json(
         { error: "Nessun lead nel database: esegui prima `npm run seed` o invia un lead dal form." },
@@ -27,7 +27,7 @@ export async function POST() {
       );
     }
     const contenuto = await generaReportSettimanale(leads);
-    saveReport(contenuto);
+    await saveReport(contenuto);
     return NextResponse.json({
       report: { contenuto, created_at: new Date().toISOString() },
     });

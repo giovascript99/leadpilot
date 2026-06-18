@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 export async function GET() {
   try {
-    return NextResponse.json({ leads: listLeads() });
+    return NextResponse.json({ leads: await listLeads() });
   } catch (err) {
     console.error("GET /api/leads", err);
     return NextResponse.json(
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     const { risultato: q } = await qualificaLead({ nome, email, telefono, messaggio });
     const elapsed = Date.now() - start;
 
-    const lead = insertLead({
+    const lead = await insertLead({
       nome,
       email,
       telefono: telefono || null,

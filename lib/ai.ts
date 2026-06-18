@@ -222,9 +222,14 @@ SCALA SCORE (àncorati a questi riferimenti, distanzia i casi diversi):
 - 85-100 → caldo: in target, budget esplicito ≥ minimo E tempistica/urgenza chiara
 - 70-84  → caldo: in target con budget O tempistica chiari, manca solo un dettaglio
 - 45-69  → tiepido: probabilmente in target ma mancano informazioni chiave (budget, zona, perimetro)
-- 20-44  → freddo: richiesta vaga senza dettagli utili, oppure fuori zona/fuori target
+- 20-44  → freddo: richiesta vaga senza dettagli utili, oppure CHIARAMENTE e con certezza fuori zona/fuori target
 - 0-19   → spam: pubblicità, messaggi irrilevanti, tentativi di vendita verso di noi
 Una richiesta generica ("vorrei informazioni") non può superare 40. Errori di ortografia o grammatica del lead NON abbassano lo score: conta solo il contenuto.
+
+REGOLE ANTI-SOTTOVALUTAZIONE (un buon lead non va perso per un tecnicismo):
+- Zona incerta/di confine: se la località rilevante NON è chiaramente fuori dalla zona operativa, o non è proprio indicata, NON trattarla come "fuori zona". In dubbio assegna "tiepido" e CHIEDI di confermare la località — non scartare a "freddo".
+- Operazione di valore: un lead con budget ≥ al minimo E una transazione concreta (vendita e/o acquisto con cifre indicate) NON può scendere sotto "tiepido" per sola incertezza sulla zona o mancanza di tempistica. Al massimo è tiepido con una domanda di chiarimento.
+- In un'operazione doppia (vendi+compra), la zona dell'immobile da VENDERE conta più di quella dell'immobile da comprare; se la prima non è indicata, chiedila invece di assumere "fuori zona".
 
 REGOLE EMAIL (vincolanti, in ordine di priorità):
 1. Se categoria è "spam": "bozza_email" deve essere esattamente "" (stringa vuota). Nessuna risposta.
@@ -233,7 +238,7 @@ REGOLE EMAIL (vincolanti, in ordine di priorità):
 4. Tono ${c.tonoRisposte}. Firma semplicemente "${c.nomeAzienda}".
 5. Se categoria è "caldo" o "tiepido" con esigenza chiara: massimo 120 parole, personalizza sul messaggio e proponi un sopralluogo con questi 3 slot: ${slotsSuggeriti.map((s) => `${s.giorno} ore ${s.ora}`).join(", ")}.
 6. Se la richiesta è vaga o "freddo" ma potenzialmente recuperabile: massimo 60 parole, fai UNA SOLA domanda di chiarimento (quella più utile per qualificare il lead), niente slot, niente elenco dei servizi.
-7. Se "freddo" perché fuori zona o fuori target: declino cortese in massimo 60 parole, senza slot.`;
+7. Se "freddo" perché CON CERTEZZA fuori zona o fuori target: declino cortese in massimo 60 parole, senza slot. Se invece la zona è solo incerta o non indicata (vedi REGOLE ANTI-SOTTOVALUTAZIONE), NON declinare: applica la regola 6 e chiedi di confermare la località.`;
 
   const response = await generateWithRetry({
     model: MODEL,

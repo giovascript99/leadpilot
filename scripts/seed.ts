@@ -5,6 +5,15 @@
  *
  * Uso: npm run seed  (alias: npm run demo:reset)
  */
+// Carica le variabili da .env (tsx non lo fa in automatico come Next).
+// Senza questo il seed scriverebbe sul file locale anche con Turso configurato.
+// Tollerante: se .env non esiste (es. solo seed locale) si prosegue comunque.
+try {
+  process.loadEnvFile(".env");
+} catch {
+  // nessun .env: si userà il database locale di default
+}
+
 import { insertLead, resetAll } from "../lib/db";
 import { prossimiGiorniLavorativi } from "../lib/ai";
 import { businessConfig } from "../config/business";

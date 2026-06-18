@@ -8,6 +8,9 @@ draft email — in seconds instead of hours.
 valutata, categorizzata e gestita con una bozza di risposta pronta, in
 pochi secondi. (L'interfaccia dell'app è in italiano.)*
 
+**▶ Live demo: https://leadpilot-five.vercel.app** &nbsp;·&nbsp; [Dashboard](https://leadpilot-five.vercel.app/dashboard)
+*(synthetic demo data; the dashboard works without any API key)*
+
 > Built as a configurable demo: the entire app — branding, services,
 > qualification criteria, tone — is driven by a **single config file**, so it
 > can be re-skinned for any business in minutes.
@@ -136,6 +139,16 @@ scripts/seed.ts           Seeds 12 sector-aware demo leads
 Change the imported preset in [`config/business.ts`](config/business.ts) (one
 line: `immobiliare` or `edilizia`, or your own preset) and run
 `npm run demo:reset` — the seed adapts to the active sector automatically.
+
+## Deployment
+
+Deployed on **Vercel** with **Turso** (managed libSQL) as the database. Local
+SQLite can't run on serverless (no persistent filesystem), so the same
+`@libsql/client` code points to a local `file:` database in development and to
+Turso in production — selected purely by environment variables, no code change.
+
+Production env vars: `GEMINI_API_KEY`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`.
+Seed the production database once with `npm run seed` (it reads the same `.env`).
 
 ## License
 
